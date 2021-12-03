@@ -1,4 +1,4 @@
-import logger from '../logger';
+import logger from './logger';
 import * as express from 'express';
 import * as expressWS from 'express-ws';
 import * as cors from 'cors';
@@ -31,8 +31,8 @@ export class API {
         const PrivatePages = require('./external-private').PrivatePages;
 
         this.internalApp.use(InternalAPI);
-        this.externalPublicApp.use(PublicPages);
-        this.externalPrivateApp.use(PrivatePages);
+        //this.externalPublicApp.use(PublicPages);
+        //this.externalPrivateApp.use(PrivatePages);
     }
 }
 
@@ -93,3 +93,5 @@ function initExpress(port, host) {
 
     return app;
 }
+
+new API();

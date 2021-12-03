@@ -8,10 +8,13 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "tsc && electron-forge start",
+    "start": "tsc && node .",
+    "startElectron": "tsc && electron-forge start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "debug": "npm start -- debug",
+    "debugElectron": "npm run startElectron -- debug"
   },
   "author": "ReiTech",
   "license": "",
