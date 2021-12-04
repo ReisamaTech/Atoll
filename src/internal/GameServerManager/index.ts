@@ -4,20 +4,26 @@ import {AppPaths} from '../../appSettings';
 const zipread = require("zipread");
 
 export default class GameServerManager {
-    constructor () {
+    private logger;
+    private router;
+    constructor (parentLogger, router) {
+        this.router = router;
+        this.logger = parentLogger.child({area:"GameServerManager"});
         this.importGame("A Link to the Past");
     }
 
     async importGame(gameName:string){
         const importLocation = path.resolve(`${AppPaths.WORLDS}/${gameName}`);
-        console.log(importLocation);
+        this.logger.info(importLocation);
         try {
             const gameData = await import(importLocation);
-            gameData.init();
-            gameData.generateSeed(path.resolve(`${AppPaths.PLAYERS}/Sample.json`));
+            const GAME = gameData.init(this.logger, this.router);
+            console.log(GAME);
+            const sample = await import(path.resolve(`${AppPaths.PLAYERS}/Sample.json`));
+            gameData.generateSeed(sample);
         }catch (err){
-            console.log(`An error occurred trying to load ${importLocation} -- See below:`);
-            console.error(err);
+            this.logger.info(`An error occurred trying to load ${importLocation} -- See below:`);
+            this.logger.error(err);
         }
     }
 }

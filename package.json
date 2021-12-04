@@ -16,7 +16,7 @@
     "debug": "npm start -- debug",
     "debugElectron": "npm run startElectron -- debug"
   },
-  "author": "ReiTech",
+  "author": "ATOLL Team",
   "license": "",
   "dependencies": {
     "cmdr-journal": "^7.1.1",

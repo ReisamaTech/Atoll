@@ -22,21 +22,13 @@ export class API {
     externalPrivateApp: expressWS.Application;
     externalPublicApp: expressWS.Application;
     constructor() {
-        this.internalApp = initExpress(INTERNAL_PORT, INTERNAL_HOST);
-        this.externalPublicApp = initExpress(EXTERNAL_PUBLIC_PORT, EXTERNAL_PUBLIC_HOST);
-        this.externalPrivateApp = initExpress(EXTERNAL_PRIVATE_PORT, EXTERNAL_PRIVATE_HOST);
-
-        const InternalAPI = require('./internal').InternalAPI;
-        const PublicPages = require('./external-public').PublicPages;
-        const PrivatePages = require('./external-private').PrivatePages;
-
-        this.internalApp.use(InternalAPI);
-        //this.externalPublicApp.use(PublicPages);
-        //this.externalPrivateApp.use(PrivatePages);
+        this.internalApp = initExpress(INTERNAL_PORT, INTERNAL_HOST, "./internal");
+        this.externalPublicApp = initExpress(EXTERNAL_PUBLIC_PORT, EXTERNAL_PUBLIC_HOST, "./external-public");
+        this.externalPrivateApp = initExpress(EXTERNAL_PRIVATE_PORT, EXTERNAL_PRIVATE_HOST, "./external-private");
     }
 }
 
-function initExpress(port, host) {
+function initExpress(port, host, handler) {
     const app = expressWS(express()).app;
 
     // debug logger
@@ -85,6 +77,8 @@ function initExpress(port, host) {
             throw new Error("Invalid Port");
         }
     }
+    
+    app.use(require(handler)(app.locals.logger).router);
 
     const server = app.listen(port, host);
     server.on("listening", () => {

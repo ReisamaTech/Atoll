@@ -1,8 +1,13 @@
 import * as express from 'express';
 import GameServerManager from './GameServerManager';
 
-const gameServer:GameServerManager = new GameServerManager();
+module.exports = function (logger) {
 
-export const InternalAPI = express.Router({
-    strict: true
-});
+    const router = express.Router({
+        strict: true
+    });
+    
+    const gameServer: GameServerManager = new GameServerManager(logger, router);
+    //console.log(router);
+    return { router };
+};
