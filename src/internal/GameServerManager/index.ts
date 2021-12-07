@@ -1,5 +1,6 @@
 import * as path from 'path';
 import {AppPaths} from '../../appSettings';
+import * as express from 'express';
 
 const zipread = require("zipread");
 
@@ -17,10 +18,11 @@ export default class GameServerManager {
         this.logger.info(importLocation);
         try {
             const gameData = await import(importLocation);
-            const GAME = gameData.init(this.logger, this.router);
+            const GAME = gameData.init(this.logger, express);
             console.log(GAME);
-            const sample = await import(path.resolve(`${AppPaths.PLAYERS}/Sample.json`));
-            gameData.generateSeed(sample);
+            this.router.use(GAME.router);
+            //const sample = await import(path.resolve(`${AppPaths.PLAYERS}/Sample.json`));
+            //gameData.generateSeed(sample);
         }catch (err){
             this.logger.info(`An error occurred trying to load ${importLocation} -- See below:`);
             this.logger.error(err);
